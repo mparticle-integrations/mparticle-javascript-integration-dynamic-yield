@@ -1,0 +1,15 @@
+{
+  "name": "mparticle-dynamic-yield",
+  "version": "1.0.0",
+  "description": "mParticle Dynamic Yield kit integration",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mparticle-integrations/mparticle-javascript-integration-dynamic-yield.git"
+  },
+  "author": "Robert Ing (ring@mparticle.com)",
+  "license": "Apache",
+  "devDependencies": {
+    "should": "^7.1.0",
+    "mocha": "^2.3.2"
+  }
+}
