@@ -40,7 +40,7 @@
             reportingService = service;
             settings = forwarderSettings;
             try {
-                if (testMode || DY && DY.API) {
+                if (testMode || window.DY && window.DY.API) {
                     isInitialized = true;
                     // DY is an AB testing tool. It is likely that clients will manually put AB testing tool scripts in the header already
                     // If that is the case, do not load
@@ -48,14 +48,14 @@
                     var DYdynamic = document.createElement('script');
                     DYdynamic.type = 'text/javascript';
                     DYdynamic.async = false;
-                    DYdynamic.src = 'http://cdn.dynamicyield.com/api/' + settings.siteId + '/api_dynamic.js';
+                    DYdynamic.src = 'https://cdn.dynamicyield.com/api/' + settings.siteId + '/api_dynamic.js';
                     DYdynamic.setAttribute('id', 'DYdynamic');
                     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(DYdynamic);
                     DYdynamic.onload = function() {
                         var DYStatic = document.createElement('script');
                         DYStatic.type = 'text/javascript';
                         DYStatic.async = false;
-                        DYStatic.src = 'http://cdn.dynamicyield.com/api/' + settings.siteId + '/api_static.js';
+                        DYStatic.src = 'https://cdn.dynamicyield.com/api/' + settings.siteId + '/api_static.js';
                         (document.getElementById('DYdynamic')[0] || document.getElementsByTagName('body')[0]).appendChild(DYStatic);
                         DYStatic.onload = function() {
                             isInitialized = true;
