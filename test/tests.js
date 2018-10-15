@@ -228,7 +228,7 @@ describe('ClientSdk Forwarder', function () {
                         Price: 50,
                         Name: 'Prod1',
                         TotalAmount: 50,
-                        Quantity: 1,
+                        Quantity: '1',
                         Attributes: {attribute2: 'test2'},
                         Sku: 'Sku2'
                     }
@@ -253,6 +253,7 @@ describe('ClientSdk Forwarder', function () {
         window.DY.properties.currency.should.equal('USD');
         window.DY.properties.productId.should.equal('Sku2');
         window.DY.properties.quantity.should.equal(1);
+        (typeof window.DY.properties.quantity).should.equal('number');
         window.DY.properties.attribute2.should.equal('test2');
         window.DY.properties.cart[0].productId.should.equal('Sku1');
         window.DY.properties.cart[0].quantity.should.equal(2);
@@ -352,7 +353,7 @@ describe('ClientSdk Forwarder', function () {
                         Price: 100,
                         Name: 'OldProd1',
                         TotalAmount: 200,
-                        Quantity: 2,
+                        Quantity: '2',
                         Attributes: {attribute1: 'test1'},
                         Sku: 'Sku1'
                     }
@@ -385,6 +386,7 @@ describe('ClientSdk Forwarder', function () {
         window.DY.properties.currency.should.equal('USD');
         window.DY.properties.productId.should.equal('Sku1');
         window.DY.properties.quantity.should.equal(2);
+        (typeof (window.DY.properties.quantity)).should.equal('number');
         window.DY.properties.attribute1.should.equal('test1');
         window.DY.properties.cart.length.should.equal(1);
         window.DY.properties.cart[0].productId.should.equal('Sku2');
