@@ -168,8 +168,8 @@
             return productList.map(function(product) {
                 var attrs = {
                     productId: product.Sku,
-                    quantity: parseFloat(product.Quantity),
-                    itemPrice: parseFloat(product.Price)
+                    quantity: Number(product.Quantity),
+                    itemPrice: Number(product.Price)
                 };
                 for (var key in product.Attributes) {
                     if (!ignoredKeys[key]) {
@@ -195,7 +195,7 @@
                     dyType: 'add-to-cart-v1',
                     value: product.quantity * product.itemPrice,
                     productId: product.productId,
-                    quantity: parseFloat(product.quantity)
+                    quantity: Number(product.quantity)
                 };
                 if (event.CurrencyCode) {
                     properties.currency = event.CurrencyCode;
@@ -309,7 +309,7 @@
                 dyType: 'remove-from-cart-v1',
                 value: removedProduct.Quantity * removedProduct.Price,
                 productId: removedProduct.Sku,
-                quantity: parseFloat(removedProduct.Quantity),
+                quantity: Number(removedProduct.Quantity),
                 cart: mapMPProductListToDYCart(event.ShoppingCart.ProductList).filter(function(product) {
                     return product.productId !== removedProduct.Sku;
                 })
