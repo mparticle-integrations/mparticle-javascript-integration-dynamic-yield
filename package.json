@@ -1,17 +1,13 @@
 {
   "name": "@mparticle/web-dynamic-yield-kit",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
+  "author": "mParticle Developers <developers@mparticle.com> (https://www.mparticle.com)",
   "description": "mParticle Dynamic Yield kit integration",
-  "license": "Apache",
-  "repository": "https://github.com/mparticle-integrations/mparticle-javascript-integration-dynamic-yield",
-  "contributors": [
-    "Robert Ing (ring@mparticle.com)",
-    "mParticle Developers <developers@mparticle.com> (https://www.mparticle.com)"
-  ],
-  "browser": "dist/DynamicYieldKit.js",
+  "browser": "dist/DynamicYieldKit.common.js",
   "files": [
-    "dist/DynamicYieldKit.js"
+    "dist/DynamicYieldKit.common.js"
   ],
+  "repository": "https://github.com/mparticle-integrations/mparticle-javascript-integration-dynamic-yield",
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "watch": "rollup --config rollup.config.js -w"
@@ -24,6 +20,8 @@
     "rollup-plugin-node-resolve": "^5.0.1"
   },
   "dependencies": {
+    "isobject": "^4.0.0",
     "@mparticle/web-sdk": "^2.9.4-rc.1"
-  }
+  },
+  "license": "Apache-2.0"
 }
