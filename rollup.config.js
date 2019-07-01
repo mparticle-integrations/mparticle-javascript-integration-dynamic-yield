@@ -21,7 +21,7 @@ export default [
     {
         input: 'src/DynamicYieldKit.js',
         output: {
-            file: 'dist/DynamicYieldKit.js',
+            file: 'dist/DynamicYieldKit.iife.js',
             format: 'iife',
             exports: 'named',
             name: 'mpDynamicYieldKit',
@@ -37,7 +37,7 @@ export default [
     {
         input: 'src/DynamicYieldKit.js',
         output: {
-            file: 'npm/DynamicYieldKit.js',
+            file: 'dist/DynamicYieldKit.common.js',
             format: 'cjs',
             exports: 'named',
             name: 'mpDynamicYieldKit',

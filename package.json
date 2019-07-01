@@ -3,9 +3,9 @@
   "version": "2.0.1-rc.1",
   "author": "mParticle Developers <developers@mparticle.com> (https://www.mparticle.com)",
   "description": "mParticle Dynamic Yield kit integration",
-  "browser": "npm/DynamicYieldKit.js",
+  "browser": "dist/DynamicYieldKit.common.js",
   "files": [
-    "npm/DynamicYieldKit.js"
+    "dist/DynamicYieldKit.common.js"
   ],
   "repository": "https://github.com/mparticle-integrations/mparticle-javascript-integration-dynamic-yield",
   "scripts": {
