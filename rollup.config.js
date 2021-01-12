@@ -5,22 +5,6 @@ export default [
     {
         input: 'src/DynamicYieldKit.js',
         output: {
-            file: 'DynamicYieldKit.js',
-            format: 'iife',
-            exports: 'named',
-            name: 'mpDynamicYieldKit',
-            strict: false
-        },
-        plugins: [
-            resolve({
-                browser: true
-            }),
-            commonjs()
-        ]
-    },
-    {
-        input: 'src/DynamicYieldKit.js',
-        output: {
             file: 'dist/DynamicYieldKit.iife.js',
             format: 'iife',
             exports: 'named',
