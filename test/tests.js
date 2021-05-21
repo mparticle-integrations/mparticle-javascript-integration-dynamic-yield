@@ -206,12 +206,6 @@ describe('ClientSdk Forwarder', function () {
         window.DY.properties.currency.should.equal('USD');
         window.DY.properties.key1.should.equal('value1');
         window.DY.properties.key2.should.equal('value2');
-        window.DY.properties.cart[0].productId.should.equal('12345');
-        window.DY.properties.cart[0].quantity.should.equal(1);
-        window.DY.properties.cart[0].itemPrice.should.equal(50);
-        window.DY.properties.cart[1].productId.should.equal('23456');
-        window.DY.properties.cart[1].quantity.should.equal(1);
-        window.DY.properties.cart[1].itemPrice.should.equal(100);
 
         done();
     });
@@ -255,14 +249,6 @@ describe('ClientSdk Forwarder', function () {
         window.DY.properties.quantity.should.equal(1);
         (typeof window.DY.properties.quantity).should.equal('number');
         window.DY.properties.attribute2.should.equal('test2');
-        window.DY.properties.cart[0].productId.should.equal('Sku1');
-        window.DY.properties.cart[0].quantity.should.equal(2);
-        window.DY.properties.cart[0].itemPrice.should.equal(100);
-        window.DY.properties.cart[0].attribute1.should.equal('test1');
-        window.DY.properties.cart[1].productId.should.equal('Sku2');
-        window.DY.properties.cart[1].quantity.should.equal(1);
-        window.DY.properties.cart[1].itemPrice.should.equal(50);
-        window.DY.properties.cart[1].attribute2.should.equal('test2');
 
         done();
     });
@@ -321,22 +307,6 @@ describe('ClientSdk Forwarder', function () {
         window.DY.properties.productId.should.equal(product3.Sku);
         window.DY.properties.quantity.should.equal(product3.Quantity);
         window.DY.properties.attribute3.should.equal('test3');
-        window.DY.properties.cart[0].productId.should.equal(oldProduct.Sku);
-        window.DY.properties.cart[0].quantity.should.equal(oldProduct.Quantity);
-        window.DY.properties.cart[0].itemPrice.should.equal(oldProduct.Price);
-        window.DY.properties.cart[0].attribute1.should.equal(oldProduct.Attributes.attribute1);
-        window.DY.properties.cart[1].productId.should.equal(product1.Sku);
-        window.DY.properties.cart[1].quantity.should.equal(product1.Quantity);
-        window.DY.properties.cart[1].itemPrice.should.equal(product1.Price);
-        window.DY.properties.cart[1].attribute1.should.equal(product1.Attributes.attribute1);
-        window.DY.properties.cart[2].productId.should.equal(product2.Sku);
-        window.DY.properties.cart[2].quantity.should.equal(product2.Quantity);
-        window.DY.properties.cart[2].itemPrice.should.equal(product2.Price);
-        window.DY.properties.cart[2].attribute2.should.equal(product2.Attributes.attribute2);
-        window.DY.properties.cart[3].productId.should.equal(product3.Sku);
-        window.DY.properties.cart[3].quantity.should.equal(product3.Quantity);
-        window.DY.properties.cart[3].itemPrice.should.equal(product3.Price);
-        window.DY.properties.cart[3].attribute3.should.equal(product3.Attributes.attribute3);
 
         done();
     });
@@ -388,11 +358,6 @@ describe('ClientSdk Forwarder', function () {
         window.DY.properties.quantity.should.equal(2);
         (typeof (window.DY.properties.quantity)).should.equal('number');
         window.DY.properties.attribute1.should.equal('test1');
-        window.DY.properties.cart.length.should.equal(1);
-        window.DY.properties.cart[0].productId.should.equal('Sku2');
-        window.DY.properties.cart[0].quantity.should.equal(1);
-        window.DY.properties.cart[0].itemPrice.should.equal(30);
-        window.DY.properties.cart[0].attribute2.should.equal('test2');
 
         done();
     });
@@ -484,7 +449,7 @@ describe('ClientSdk Forwarder', function () {
             window.DY.properties.cuidType.should.equal('customerid');
 
             done();
-        }, 0);
+        }, 10);
     });
 
     it('should not call log in if there is no customer id or email', function(done){

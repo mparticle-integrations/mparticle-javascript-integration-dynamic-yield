@@ -223,7 +223,6 @@ var constructor = function() {
         var products = mapMPProductListToDYCart(
             event.ProductAction.ProductList
         );
-        var cart = mapMPProductListToDYCart(event.ShoppingCart.ProductList);
 
         products.forEach(function(product) {
             var properties = {
@@ -235,8 +234,6 @@ var constructor = function() {
             if (event.CurrencyCode) {
                 properties.currency = event.CurrencyCode;
             }
-            cart = cart.concat(product);
-            properties.cart = cart;
 
             for (var key in product) {
                 if (!ignoredKeys[key]) {
@@ -352,11 +349,6 @@ var constructor = function() {
             value: removedProduct.Quantity * removedProduct.Price,
             productId: removedProduct.Sku,
             quantity: Number(removedProduct.Quantity),
-            cart: mapMPProductListToDYCart(
-                event.ShoppingCart.ProductList
-            ).filter(function(product) {
-                return product.productId !== removedProduct.Sku;
-            }),
         };
 
         if (event.CurrencyCode) {
