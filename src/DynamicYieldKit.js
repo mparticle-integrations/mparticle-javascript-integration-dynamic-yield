@@ -31,7 +31,8 @@ var constructor = function() {
         isInitialized = false,
         reportingService,
         settings,
-        eventQueue = [];
+        eventQueue = [],
+        identityQueue = [];
 
     self.name = name;
 
@@ -70,6 +71,14 @@ var constructor = function() {
                     ).appendChild(DYStatic);
                     DYStatic.onload = function() {
                         isInitialized = true;
+
+                        if (DY && DY.API && identityQueue.length > 0) {
+                            for (var i = 0; i < identityQueue.length; i++) {
+                                onUserIdentified(identityQueue[i]);
+                            }
+
+                            eventQueue = [];
+                        }
 
                         if (DY && DY.API && eventQueue.length > 0) {
                             for (var i = 0; i < eventQueue.length; i++) {
@@ -249,6 +258,10 @@ var constructor = function() {
     }
 
     function onUserIdentified(mpUser) {
+        if (!isInitialized) {
+            identityQueue.push(mpUser);
+            return;
+        }
         var properties = { dyType: 'login-v1' },
             userIdentities = mpUser.getUserIdentities().userIdentities;
 
