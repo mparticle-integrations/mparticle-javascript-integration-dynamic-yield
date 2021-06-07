@@ -40,11 +40,13 @@ var constructor = function() {
         reportingService = service;
         settings = forwarderSettings;
         try {
+            // DY is an AB testing tool. It is likely that clients will manually put AB testing tool scripts in the header already
+            // If that is the case, do not load
             if (testMode || (window.DY && window.DY.API)) {
                 isInitialized = true;
-                // DY is an AB testing tool. It is likely that clients will manually put AB testing tool scripts in the header already
-                // If that is the case, do not load
             } else {
+                // DY has 2 scripts, a "dynamic.js" and a "static.js"
+                // static.js has the API method on it
                 var DYdynamic = document.createElement('script');
                 DYdynamic.type = 'text/javascript';
                 DYdynamic.async = false;
@@ -57,37 +59,31 @@ var constructor = function() {
                     document.getElementsByTagName('head')[0] ||
                     document.getElementsByTagName('body')[0]
                 ).appendChild(DYdynamic);
-                DYdynamic.onload = function() {
-                    var DYStatic = document.createElement('script');
-                    DYStatic.type = 'text/javascript';
-                    DYStatic.async = false;
-                    DYStatic.src =
-                        'https://cdn.dynamicyield.com/api/' +
-                        settings.siteId +
-                        '/api_static.js';
-                    (
-                        document.getElementById('DYdynamic')[0] ||
-                        document.getElementsByTagName('body')[0]
-                    ).appendChild(DYStatic);
-                    DYStatic.onload = function() {
-                        isInitialized = true;
-
-                        if (DY && DY.API && identityQueue.length > 0) {
-                            for (var i = 0; i < identityQueue.length; i++) {
-                                onUserIdentified(identityQueue[i]);
-                            }
-
-                            eventQueue = [];
-                        }
-
-                        if (DY && DY.API && eventQueue.length > 0) {
+                var DYStatic = document.createElement('script');
+                DYStatic.type = 'text/javascript';
+                DYStatic.async = false;
+                DYStatic.src =
+                    'https://cdn.dynamicyield.com/api/' +
+                    settings.siteId +
+                    '/api_static.js';
+                (
+                    document.getElementsByTagName('head')[0] ||
+                    document.getElementsByTagName('body')[0]
+                ).appendChild(DYStatic);
+                DYStatic.onload = function() {
+                    isInitialized = true;
+                    if (DY && DY.API && eventQueue.length > 0) {
+                        try {
                             for (var i = 0; i < eventQueue.length; i++) {
-                                processEvent(eventQueue[i]);
+                                var item = eventQueue[i];
+                                item.action(item.data);
                             }
-
+                            eventQueue = [];
+                        } catch (e) {
+                            console.log('Error on Dynamic Yield Kit ' + e);
                             eventQueue = [];
                         }
-                    };
+                    }
                 };
             }
 
@@ -147,7 +143,7 @@ var constructor = function() {
                 return 'Failed to send to: ' + name + ' ' + e;
             }
         } else {
-            eventQueue.push(event);
+            eventQueue.push({ action: processEvent, data: event });
         }
 
         return (
@@ -259,9 +255,10 @@ var constructor = function() {
 
     function onUserIdentified(mpUser) {
         if (!isInitialized) {
-            identityQueue.push(mpUser);
+            identityQueue.push({ action: onUserIdentified, data: mpUser });
             return;
         }
+
         var properties = { dyType: 'login-v1' },
             userIdentities = mpUser.getUserIdentities().userIdentities;
 
