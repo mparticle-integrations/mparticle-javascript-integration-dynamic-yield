@@ -376,7 +376,7 @@ describe('ClientSdk Forwarder', function() {
                     ProductList: [oldProduct],
                 },
             });
-            debugger;
+
             window.DY.dyType[0].should.equal('add-to-cart-v1');
             window.DY.addToCartIterations.should.equal(3);
             // each property is added
@@ -483,7 +483,6 @@ describe('ClientSdk Forwarder', function() {
         });
 
         it('should log a custom event', function(done) {
-            debugger;
             mParticle.forwarder.process({
                 EventName: 'custom event',
                 EventDataType: MessageType.PageEvent,
@@ -493,7 +492,7 @@ describe('ClientSdk Forwarder', function() {
                     foo2: 'bar2',
                 },
             });
-            debugger;
+
             window.DY.name.should.equal('custom event');
             window.DY.properties[0].foo1.should.equal('bar1');
             window.DY.properties[0].foo2.should.equal('bar2');
