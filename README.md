@@ -1,10 +1,10 @@
-# integration-dyanamic-yield
+# integration-dynamic-yield
 
 Dynamic Yield Javascript integration for mParticle
 
 #License
 
-Copyright 2018 mParticle, Inc.
+Copyright 2021 mParticle, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
