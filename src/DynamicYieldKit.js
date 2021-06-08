@@ -31,8 +31,7 @@ var constructor = function() {
         isInitialized = false,
         reportingService,
         settings,
-        eventQueue = [],
-        identityQueue = [];
+        eventQueue = [];
 
     self.name = name;
 
@@ -44,6 +43,7 @@ var constructor = function() {
             // If that is the case, do not load
             if (testMode || (window.DY && window.DY.API)) {
                 isInitialized = true;
+                processQueue(eventQueue);
             } else {
                 // DY has 2 scripts, a "dynamic.js" and a "static.js"
                 // static.js has the API method on it
@@ -72,18 +72,7 @@ var constructor = function() {
                 ).appendChild(DYStatic);
                 DYStatic.onload = function() {
                     isInitialized = true;
-                    if (DY && DY.API && eventQueue.length > 0) {
-                        try {
-                            for (var i = 0; i < eventQueue.length; i++) {
-                                var item = eventQueue[i];
-                                item.action(item.data);
-                            }
-                            eventQueue = [];
-                        } catch (e) {
-                            console.log('Error on Dynamic Yield Kit ' + e);
-                            eventQueue = [];
-                        }
-                    }
+                    processQueue(eventQueue);
                 };
             }
 
@@ -93,9 +82,25 @@ var constructor = function() {
         }
     }
 
+    function processQueue(queue) {
+        var item;
+        if (DY && DY.API && queue.length > 0) {
+            try {
+                while (queue.length > 0) {
+                    item = queue.shift();
+                    item.action(item.data);
+                }
+            } catch (e) {
+                console.log('Error on Dynamic Yield Kit ' + e);
+            }
+        }
+    }
+
     function processEvent(event) {
         var reportEvent = false;
         if (isInitialized) {
+            // first process anything from eventQueue
+            processQueue(eventQueue);
             try {
                 if (
                     event.EventDataType === MessageType.Commerce &&
@@ -255,7 +260,7 @@ var constructor = function() {
 
     function onUserIdentified(mpUser) {
         if (!isInitialized) {
-            identityQueue.push({ action: onUserIdentified, data: mpUser });
+            eventQueue.push({ action: onUserIdentified, data: mpUser });
             return;
         }
 
