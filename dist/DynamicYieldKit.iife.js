@@ -1,4 +1,5 @@
 var mpDynamicYieldKit = (function (exports) {
+
     /* eslint-disable no-undef */
 
     //
@@ -40,11 +41,14 @@ var mpDynamicYieldKit = (function (exports) {
             reportingService = service;
             settings = forwarderSettings;
             try {
+                // DY is an AB testing tool. It is likely that clients will manually put AB testing tool scripts in the header already
+                // If that is the case, do not load
                 if (testMode || (window.DY && window.DY.API)) {
                     isInitialized = true;
-                    // DY is an AB testing tool. It is likely that clients will manually put AB testing tool scripts in the header already
-                    // If that is the case, do not load
+                    processQueue(eventQueue);
                 } else {
+                    // DY has 2 scripts, a "dynamic.js" and a "static.js"
+                    // static.js has the API method on it
                     var DYdynamic = document.createElement('script');
                     DYdynamic.type = 'text/javascript';
                     DYdynamic.async = false;
@@ -57,29 +61,20 @@ var mpDynamicYieldKit = (function (exports) {
                         document.getElementsByTagName('head')[0] ||
                         document.getElementsByTagName('body')[0]
                     ).appendChild(DYdynamic);
-                    DYdynamic.onload = function() {
-                        var DYStatic = document.createElement('script');
-                        DYStatic.type = 'text/javascript';
-                        DYStatic.async = false;
-                        DYStatic.src =
-                            'https://cdn.dynamicyield.com/api/' +
-                            settings.siteId +
-                            '/api_static.js';
-                        (
-                            document.getElementById('DYdynamic')[0] ||
-                            document.getElementsByTagName('body')[0]
-                        ).appendChild(DYStatic);
-                        DYStatic.onload = function() {
-                            isInitialized = true;
-
-                            if (DY && DY.API && eventQueue.length > 0) {
-                                for (var i = 0; i < eventQueue.length; i++) {
-                                    processEvent(eventQueue[i]);
-                                }
-
-                                eventQueue = [];
-                            }
-                        };
+                    var DYStatic = document.createElement('script');
+                    DYStatic.type = 'text/javascript';
+                    DYStatic.async = false;
+                    DYStatic.src =
+                        'https://cdn.dynamicyield.com/api/' +
+                        settings.siteId +
+                        '/api_static.js';
+                    (
+                        document.getElementsByTagName('head')[0] ||
+                        document.getElementsByTagName('body')[0]
+                    ).appendChild(DYStatic);
+                    DYStatic.onload = function() {
+                        isInitialized = true;
+                        processQueue(eventQueue);
                     };
                 }
 
@@ -89,9 +84,25 @@ var mpDynamicYieldKit = (function (exports) {
             }
         }
 
+        function processQueue(queue) {
+            var item;
+            if (DY && DY.API && queue.length > 0) {
+                try {
+                    while (queue.length > 0) {
+                        item = queue.shift();
+                        item.action(item.data);
+                    }
+                } catch (e) {
+                    console.log('Error on Dynamic Yield Kit ' + e);
+                }
+            }
+        }
+
         function processEvent(event) {
             var reportEvent = false;
             if (isInitialized) {
+                // first process anything from eventQueue
+                processQueue(eventQueue);
                 try {
                     if (
                         event.EventDataType === MessageType.Commerce &&
@@ -139,7 +150,7 @@ var mpDynamicYieldKit = (function (exports) {
                     return 'Failed to send to: ' + name + ' ' + e;
                 }
             } else {
-                eventQueue.push(event);
+                eventQueue.push({ action: processEvent, data: event });
             }
 
             return (
@@ -250,6 +261,11 @@ var mpDynamicYieldKit = (function (exports) {
         }
 
         function onUserIdentified(mpUser) {
+            if (!isInitialized) {
+                eventQueue.push({ action: onUserIdentified, data: mpUser });
+                return;
+            }
+
             var properties = { dyType: 'login-v1' },
                 userIdentities = mpUser.getUserIdentities().userIdentities;
 
@@ -445,6 +461,8 @@ var mpDynamicYieldKit = (function (exports) {
 
     exports.default = DynamicYieldKit;
     exports.register = DynamicYieldKit_1;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 
