@@ -503,7 +503,6 @@ describe('ClientSdk Forwarder', function() {
         });
 
         it('should log a custom event', function(done) {
-            debugger;
             mParticle.forwarder.process({
                 EventName: 'custom event',
                 EventDataType: MessageType.PageEvent,
