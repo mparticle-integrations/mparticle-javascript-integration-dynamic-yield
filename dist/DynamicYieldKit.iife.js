@@ -347,6 +347,8 @@ var mpDynamicYieldKit = (function (exports) {
                         properties: properties,
                     });
                 });
+
+                return true;
             }
         }
 
@@ -397,6 +399,8 @@ var mpDynamicYieldKit = (function (exports) {
                 name: 'Keyword Search',
                 properties: properties,
             });
+
+            return true;
         }
 
         this.init = initForwarder;

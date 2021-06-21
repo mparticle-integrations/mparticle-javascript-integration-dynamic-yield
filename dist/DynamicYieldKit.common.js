@@ -347,6 +347,8 @@ var constructor = function() {
                     properties: properties,
                 });
             });
+
+            return true;
         }
     }
 
@@ -397,6 +399,8 @@ var constructor = function() {
             name: 'Keyword Search',
             properties: properties,
         });
+
+        return true;
     }
 
     this.init = initForwarder;
