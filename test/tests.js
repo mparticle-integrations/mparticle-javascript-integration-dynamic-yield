@@ -98,7 +98,6 @@ describe('ClientSdk Forwarder', function() {
                 this.event = null;
             };
         },
-        reportService = new ReportingService(),
         MockDynamicYieldSdk = function() {
             var self = this;
             self.addToCartIterations = 0;
@@ -137,6 +136,7 @@ describe('ClientSdk Forwarder', function() {
         };
     describe('not initialized', function() {
         before(function() {
+            reportService = new ReportingService();
             mParticle.EventType = EventType;
             mParticle.ProductActionType = ProductActionType;
             mParticle.PromotionType = PromotionActionType;
@@ -212,6 +212,7 @@ describe('ClientSdk Forwarder', function() {
         });
 
         beforeEach(function() {
+            reportService = new ReportingService();
             window.DY = new MockDynamicYieldSdk();
             mParticle.forwarder.init(
                 {
@@ -283,6 +284,11 @@ describe('ClientSdk Forwarder', function() {
             window.DY.properties[0].currency.should.equal('USD');
             window.DY.properties[0].key1.should.equal('value1');
             window.DY.properties[0].key2.should.equal('value2');
+
+            reportService.event.should.have.property(
+                'EventName',
+                'Test Purchase Event'
+            );
 
             done();
         });
@@ -402,6 +408,10 @@ describe('ClientSdk Forwarder', function() {
             window.DY.properties[1].attribute2.should.equal('test2');
             window.DY.properties[2].attribute3.should.equal('test3');
 
+            reportService.event.should.have.property(
+                'EventName',
+                'eCommerce - AddToCart'
+            );
             done();
         });
 
@@ -432,7 +442,10 @@ describe('ClientSdk Forwarder', function() {
             window.DY.properties[0].quantity.should.equal(2);
             (typeof window.DY.properties[0].quantity).should.equal('number');
             window.DY.properties[0].attribute1.should.equal('test1');
-
+            reportService.event.should.have.property(
+                'EventName',
+                'eCommerce - RemoveFromCart'
+            );
             done();
         });
 
@@ -455,7 +468,10 @@ describe('ClientSdk Forwarder', function() {
                     ],
                 },
             });
-
+            reportService.event.should.have.property(
+                'EventName',
+                'eCommerce - AddToWishlist'
+            );
             window.DY.dyType[0].should.equal('add-to-wishlist-v1');
             window.DY.properties[0].productId.should.equal('Sku2');
             window.DY.properties[0].attribute1.should.equal('test');
@@ -475,6 +491,10 @@ describe('ClientSdk Forwarder', function() {
                 },
             });
 
+            reportService.event.should.have.property(
+                'EventName',
+                'test search'
+            );
             window.DY.dyType[0].should.equal('keyword-search-v1');
             window.DY.properties[0].Keywords.should.equal('search query');
             window.DY.properties[0].attribute1.should.equal('test1');
@@ -492,7 +512,10 @@ describe('ClientSdk Forwarder', function() {
                     foo2: 'bar2',
                 },
             });
-
+            reportService.event.should.have.property(
+                'EventName',
+                'custom event'
+            );
             window.DY.name.should.equal('custom event');
             window.DY.properties[0].foo1.should.equal('bar1');
             window.DY.properties[0].foo2.should.equal('bar2');
