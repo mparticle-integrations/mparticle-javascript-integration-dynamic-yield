@@ -1,5 +1,9 @@
 ## Releases
 
+#### 2.0.4 - 2021-06-21
+
+-   fix: Return true after processing search and addToWishlist events
+
 #### 2.0.3 - 2021-06-09
 
 -   fix: Add identity to event queue
