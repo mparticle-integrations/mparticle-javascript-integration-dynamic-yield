@@ -27,7 +27,7 @@
         "rollup-plugin-node-resolve": "^5.0.1",
         "shelljs": "^0.8.4",
         "should": "^7.1.0",
-        "watchify": "^3.11.1"
+        "watchify": "^4.0.0"
     },
     "dependencies": {
         "@mparticle/web-sdk": "^2.11.1"
